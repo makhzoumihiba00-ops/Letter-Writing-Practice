@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Practice Letters (A–Z) | Letter Writing Practice</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="../css/letter-writing.css" />
+</head>
+<body class="practice-page">
+  <header class="top-bar">
+    <a href="../index.html" class="btn btn-ghost btn-sm" aria-label="Back to Home">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path
+          d="M15 18L9 12L15 6"
+          stroke="currentColor"
+          stroke-width="3"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+      <span>Home</span>
+    </a>
+
+    <div class="header-title-group">
+      <span class="current-badge" id="currentLetterBadge">Letter A</span>
+      <span class="letter-counter" id="letterCounter">1 of 26</span>
+    </div>
+
+    <button
+      type="button"
+      id="soundToggleBtn"
+      class="btn btn-ghost btn-sm sound-btn"
+      aria-pressed="true"
+      title="Toggle sound effects"
+    >
+      <span id="soundIcon">🔊</span>
+    </button>
+  </header>
+
+  <main class="app-layout">
+    <!-- Left / Top: Letter Selection Grid -->
+    <aside class="alphabet-panel" aria-label="Choose a letter">
+      <div class="panel-header">
+        <h2>Pick a Letter</h2>
+      </div>
+      <div class="alphabet-grid" id="alphabetGrid" role="listbox" aria-label="English Alphabet A to Z"></div>
+    </aside>
+
+    <!-- Center: Main Writing Board -->
+    <section class="board-section" aria-label="Letter tracing board">
+      <div class="board-card">
+        <div class="board-top-bar">
+          <div class="tool-selector" role="group" aria-label="Drawing tools">
+            <button
+              type="button"
+              id="penToolBtn"
+              class="tool-btn active"
+              aria-pressed="true"
+            >
+              <span>🖍️</span>
+              <span>Draw</span>
+            </button>
+            <button
+              type="button"
+              id="eraserToolBtn"
+              class="tool-btn"
+              aria-pressed="false"
+            >
+              <span>🧼</span>
+              <span>Eraser</span>
+            </button>
+          </div>
+
+          <div class="color-picker" role="group" aria-label="Crayon colors">
+            <button
+              type="button"
+              class="color-swatch active"
+              data-color="#1cb0f6"
+              style="--swatch-color: #1cb0f6"
+              aria-label="Blue crayon"
+            ></button>
+            <button
+              type="button"
+              class="color-swatch"
+              data-color="#58cc02"
+              style="--swatch-color: #58cc02"
+              aria-label="Green crayon"
+            ></button>
+            <button
+              type="button"
+              class="color-swatch"
+              data-color="#ff9600"
+              style="--swatch-color: #ff9600"
+              aria-label="Orange crayon"
+            ></button>
+            <button
+              type="button"
+              class="color-swatch"
+              data-color="#ce82ff"
+              style="--swatch-color: #ce82ff"
+              aria-label="Purple crayon"
+            ></button>
+            <button
+              type="button"
+              class="color-swatch"
+              data-color="#ff4b4b"
+              style="--swatch-color: #ff4b4b"
+              aria-label="Red crayon"
+            ></button>
+          </div>
+        </div>
+
+        <!-- Writing Canvas Wrapper -->
+        <div class="canvas-stage" id="canvasStage">
+          <div class="writing-lines" aria-hidden="true">
+            <div class="line top-line"></div>
+            <div class="line mid-line"></div>
+            <div class="line base-line"></div>
+          </div>
+
+          <div class="letter-guide" id="letterGuide" aria-hidden="true">A</div>
+
+          <canvas
+            id="drawingCanvas"
+            aria-label="Interactive tracing canvas. Trace the letter shown."
+          ></canvas>
+
+          <!-- Subtle Quick-Praise Toast while drawing -->
+          <div class="feedback-overlay" id="feedbackOverlay" aria-live="polite">
+            <div class="feedback-pill" id="feedbackPill">
+              <span class="feedback-emoji" id="feedbackEmoji">🌟</span>
+              <span class="feedback-text" id="feedbackText">Keep Practicing!</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Primary Action & Navigation Controls -->
+        <div class="controls-bar">
+          <div class="action-group">
+            <button type="button" id="clearBtn" class="btn btn-secondary">
+              <span>🗑️</span>
+              <span>Clear</span>
+            </button>
+            <button type="button" id="retryBtn" class="btn btn-warning">
+              <span>🔄</span>
+              <span>Retry</span>
+            </button>
+            <button type="button" id="doneBtn" class="btn btn-success">
+              <span>⭐</span>
+              <span>I'm Done!</span>
+            </button>
+          </div>
+
+          <div class="nav-group">
+            <button type="button" id="prevBtn" class="btn btn-outline">
+              <span>←</span>
+              <span>Previous Letter</span>
+            </button>
+            <button type="button" id="nextBtn" class="btn btn-primary">
+              <span>Next Letter</span>
+              <span>→</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Game-Style Celebration Popup Modal -->
+  <div
+    class="celebration-modal"
+    id="celebrationModal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="celebrationTitle"
+    hidden
+  >
+    <div class="celebration-backdrop" id="celebrationBackdrop"></div>
+
+    <div class="celebration-stage">
+      <!-- Cheering Kid Mascot -->
+      <div class="celebration-mascot" aria-hidden="true">
+        <div class="mascot-circle">
+          <span class="mascot-kid">🙌</span>
+        </div>
+        <div class="mascot-ribbon">YAY!</div>
+      </div>
+
+      <!-- Glossy Blue Result Card -->
+      <div class="celebration-card-wrapper">
+        <div class="celebration-card">
+          <h2 class="celebration-title" id="celebrationTitle">Good job!</h2>
+          <p class="celebration-subtitle" id="celebrationSubtitle">You traced this letter!</p>
+
+          <!-- 3 Kawaii Smiling Stars -->
+          <div class="kawaii-stars-row" aria-hidden="true">
+            <svg class="kawaii-star star-1" viewBox="0 0 100 100">
+              <path
+                d="M50 6 L63 34 L94 38 L71 60 L77 91 L50 76 L23 91 L29 60 L6 38 L37 34 Z"
+                fill="#FFE14D"
+                stroke="#F59E0B"
+                stroke-width="5"
+                stroke-linejoin="round"
+              />
+              <circle cx="40" cy="48" r="4" fill="#4A2E00" />
+              <circle cx="60" cy="48" r="4" fill="#4A2E00" />
+              <ellipse cx="34" cy="54" rx="4.5" ry="2.5" fill="#FF8A80" />
+              <ellipse cx="66" cy="54" rx="4.5" ry="2.5" fill="#FF8A80" />
+              <path d="M44 55 Q50 62 56 55" stroke="#4A2E00" stroke-width="3.5" fill="none" stroke-linecap="round" />
+            </svg>
+
+            <svg class="kawaii-star star-2" viewBox="0 0 100 100">
+              <path
+                d="M50 6 L63 34 L94 38 L71 60 L77 91 L50 76 L23 91 L29 60 L6 38 L37 34 Z"
+                fill="#FFE14D"
+                stroke="#F59E0B"
+                stroke-width="5"
+                stroke-linejoin="round"
+              />
+              <circle cx="40" cy="48" r="4" fill="#4A2E00" />
+              <circle cx="60" cy="48" r="4" fill="#4A2E00" />
+              <ellipse cx="34" cy="54" rx="4.5" ry="2.5" fill="#FF8A80" />
+              <ellipse cx="66" cy="54" rx="4.5" ry="2.5" fill="#FF8A80" />
+              <path d="M44 54 Q50 63 56 54 Z" fill="#FF5252" stroke="#4A2E00" stroke-width="2.5" stroke-linejoin="round" />
+            </svg>
+
+            <svg class="kawaii-star star-3" viewBox="0 0 100 100">
+              <path
+                d="M50 6 L63 34 L94 38 L71 60 L77 91 L50 76 L23 91 L29 60 L6 38 L37 34 Z"
+                fill="#FFE14D"
+                stroke="#F59E0B"
+                stroke-width="5"
+                stroke-linejoin="round"
+              />
+              <!-- Happy >< eyes -->
+              <path d="M35 44 L43 48 L35 52" stroke="#4A2E00" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+              <path d="M65 44 L57 48 L65 52" stroke="#4A2E00" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+              <ellipse cx="33" cy="55" rx="4.5" ry="2.5" fill="#FF8A80" />
+              <ellipse cx="67" cy="55" rx="4.5" ry="2.5" fill="#FF8A80" />
+              <path d="M43 54 Q50 65 57 54 Z" fill="#FF5252" stroke="#4A2E00" stroke-width="2.5" stroke-linejoin="round" />
+            </svg>
+          </div>
+
+          <!-- Letter Practiced Status Row -->
+          <div class="celebration-stats">
+            <div class="stat-item">
+              <span class="stat-check">✔</span>
+              <span id="celebrationLetterStat">Letter A</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-star-icon">⭐</span>
+              <span id="celebrationProgressStat">1 / 26</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Action Pills with Cute Bear Badge -->
+        <div class="celebration-actions">
+          <span class="bear-badge" aria-hidden="true">🐻</span>
+          <button type="button" id="modalRetryBtn" class="modal-pill-btn modal-btn-secondary">
+            Retry
+          </button>
+          <button type="button" id="modalNextBtn" class="modal-pill-btn modal-btn-primary">
+            Next Letter →
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Foreground Kawaii Stars Crowd -->
+    <div class="bottom-stars-crowd" id="bottomStarsCrowd" aria-hidden="true"></div>
+  </div>
+
+  <audio id="successAudio" src="../assets/sounds/success.mp3" preload="auto"></audio>
+  <script src="../js/letter-writing.js"></script>
+</body>
+</html>

@@ -1,0 +1,1102 @@
+/* =========================================================
+   CSS Variables & Reset
+   ========================================================= */
+:root {
+  --bg-page: #f4f8fb;
+  --bg-card: #ffffff;
+  --text-main: #2b3440;
+  --text-muted: #6c7a89;
+
+  /* Duolingo-inspired vibrant palette */
+  --green: #58cc02;
+  --green-dark: #46a302;
+  --blue: #1cb0f6;
+  --blue-dark: #148ec7;
+  --orange: #ff9600;
+  --orange-dark: #d97e00;
+  --purple: #ce82ff;
+  --purple-dark: #a855f7;
+  --red: #ff4b4b;
+  --red-dark: #d93636;
+  --yellow: #ffc800;
+
+  --border-light: #e5eaf0;
+  --guide-grey: #dce2e8;
+  --shadow-soft: 0 10px 25px rgba(34, 52, 74, 0.08);
+  --radius-xl: 28px;
+  --radius-lg: 20px;
+  --radius-md: 14px;
+
+  --font-display: "Fredoka", "Nunito", sans-serif;
+  --font-body: "Nunito", sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+  font-family: var(--font-body);
+  color: var(--text-main);
+  background-color: var(--bg-page);
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* =========================================================
+   Tactile 3D Buttons
+   ========================================================= */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1;
+  padding: 13px 20px;
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  text-decoration: none;
+  user-select: none;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.15s ease;
+}
+
+.btn:hover:not(:disabled) {
+  filter: brightness(1.04);
+  transform: translateY(-1px);
+}
+
+.btn:active:not(:disabled) {
+  transform: translateY(3px);
+  box-shadow: none !important;
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.btn-lg {
+  font-size: 1.3rem;
+  padding: 18px 34px;
+  border-radius: 20px;
+}
+
+.btn-sm {
+  font-size: 0.95rem;
+  padding: 10px 14px;
+  border-radius: 13px;
+}
+
+.btn-primary {
+  background: var(--blue);
+  color: #ffffff;
+  box-shadow: 0 5px 0 var(--blue-dark);
+}
+
+.btn-success {
+  background: var(--green);
+  color: #ffffff;
+  box-shadow: 0 5px 0 var(--green-dark);
+}
+
+.btn-warning {
+  background: var(--orange);
+  color: #ffffff;
+  box-shadow: 0 5px 0 var(--orange-dark);
+}
+
+.btn-secondary {
+  background: #edf2f7;
+  color: var(--text-main);
+  box-shadow: 0 5px 0 #cbd5e1;
+}
+
+.btn-outline {
+  background: #ffffff;
+  color: var(--text-main);
+  border: 2px solid var(--border-light);
+  box-shadow: 0 4px 0 var(--border-light);
+}
+
+.btn-ghost {
+  background: #ffffff;
+  color: var(--text-main);
+  border: 2px solid var(--border-light);
+  box-shadow: 0 3px 0 var(--border-light);
+}
+
+/* =========================================================
+   Home Page (index.html)
+   ========================================================= */
+.home-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at top left, #e3f6ff 0%, #f4f8fb 55%, #eefbe6 100%);
+  position: relative;
+  padding: 24px;
+}
+
+.floating-shapes {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.shape {
+  position: absolute;
+  font-family: var(--font-display);
+  font-weight: 700;
+  opacity: 0.14;
+  animation: floatSlow 6s ease-in-out infinite;
+}
+
+.shape-a {
+  font-size: 7rem;
+  color: var(--green);
+  top: 8%;
+  left: 8%;
+}
+
+.shape-b {
+  font-size: 6rem;
+  color: var(--blue);
+  bottom: 12%;
+  left: 12%;
+  animation-delay: 1.5s;
+}
+
+.shape-c {
+  font-size: 7.5rem;
+  color: var(--orange);
+  top: 14%;
+  right: 10%;
+  animation-delay: 3s;
+}
+
+.shape-star {
+  font-size: 5.5rem;
+  color: var(--purple);
+  bottom: 14%;
+  right: 14%;
+  animation-delay: 2s;
+}
+
+@keyframes floatSlow {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-16px) rotate(6deg);
+  }
+}
+
+.home-container {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 560px;
+}
+
+.welcome-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-xl);
+  padding: 44px 32px;
+  text-align: center;
+  border: 3px solid var(--border-light);
+  box-shadow: var(--shadow-soft);
+  animation: popIn 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.mascot-badge {
+  width: 88px;
+  height: 88px;
+  margin: 0 auto 16px;
+  border-radius: 26px;
+  background: linear-gradient(135deg, #fff5cc 0%, #ffe680 100%);
+  border: 3px solid #ffd43b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 0 #f5c000;
+}
+
+.mascot-pencil {
+  font-size: 2.8rem;
+  animation: wiggle 2.5s ease-in-out infinite;
+}
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(-6deg); }
+  50% { transform: rotate(8deg); }
+}
+
+.pill-tag {
+  display: inline-block;
+  background: #e6f7ff;
+  color: var(--blue-dark);
+  font-weight: 800;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border-radius: 999px;
+  margin-bottom: 12px;
+}
+
+.home-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 2.75rem);
+  font-weight: 700;
+  color: var(--text-main);
+  line-height: 1.15;
+  margin-bottom: 12px;
+}
+
+.home-subtitle {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-bottom: 28px;
+}
+
+.preview-tiles {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.tile {
+  width: 54px;
+  height: 54px;
+  border-radius: 16px;
+  font-family: var(--font-display);
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tile-green { background: var(--green); box-shadow: 0 4px 0 var(--green-dark); }
+.tile-blue { background: var(--blue); box-shadow: 0 4px 0 var(--blue-dark); }
+.tile-orange { background: var(--orange); box-shadow: 0 4px 0 var(--orange-dark); }
+.tile-purple { background: var(--purple); box-shadow: 0 4px 0 var(--purple-dark); }
+
+/* =========================================================
+   Practice Page Header
+   ========================================================= */
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 14px 20px;
+}
+
+.header-title-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.current-badge {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.letter-counter {
+  background: #e8f5e9;
+  color: var(--green-dark);
+  font-weight: 800;
+  font-size: 0.85rem;
+  padding: 5px 12px;
+  border-radius: 999px;
+}
+
+/* =========================================================
+   Main App Grid Layout
+   ========================================================= */
+.app-layout {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 24px;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 6px 20px 32px;
+  align-items: start;
+}
+
+/* Alphabet Selection Panel */
+.alphabet-panel {
+  background: var(--bg-card);
+  border-radius: var(--radius-xl);
+  padding: 20px;
+  border: 3px solid var(--border-light);
+  box-shadow: var(--shadow-soft);
+}
+
+.panel-header h2 {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 14px;
+  color: var(--text-main);
+}
+
+.alphabet-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.letter-card {
+  aspect-ratio: 1 / 1;
+  border-radius: 16px;
+  border: 2px solid var(--border-light);
+  background: #ffffff;
+  font-family: var(--font-display);
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: var(--text-main);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 0 var(--border-light);
+  transition: transform 0.12s ease, background-color 0.15s ease, border-color 0.15s ease;
+  user-select: none;
+}
+
+.letter-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--blue);
+  background: #f0f9ff;
+}
+
+.letter-card:active {
+  transform: translateY(2px);
+  box-shadow: none;
+}
+
+.letter-card.selected {
+  background: var(--green);
+  border-color: var(--green-dark);
+  color: #ffffff;
+  box-shadow: 0 4px 0 var(--green-dark);
+  transform: scale(1.04);
+}
+
+/* =========================================================
+   Letter Writing Board
+   ========================================================= */
+.board-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-xl);
+  padding: 22px;
+  border: 3px solid var(--border-light);
+  box-shadow: var(--shadow-soft);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.board-top-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.tool-selector {
+  display: inline-flex;
+  background: #f1f5f9;
+  padding: 5px;
+  border-radius: 16px;
+  gap: 6px;
+}
+
+.tool-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 16px;
+  border: none;
+  border-radius: 12px;
+  font-family: var(--font-display);
+  font-size: 0.98rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.tool-btn.active {
+  background: #ffffff;
+  color: var(--text-main);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+}
+
+.color-picker {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.color-swatch {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--swatch-color);
+  border: 3px solid #ffffff;
+  box-shadow: 0 0 0 2px #dce2e8;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.color-swatch:hover {
+  transform: scale(1.1);
+}
+
+.color-swatch.active {
+  transform: scale(1.16);
+  box-shadow: 0 0 0 3px var(--text-main);
+}
+
+/* Interactive Canvas Stage */
+.canvas-stage {
+  position: relative;
+  width: 100%;
+  height: 410px;
+  background: #fcfdff;
+  border-radius: 24px;
+  border: 3px dashed #cbd5e1;
+  overflow: hidden;
+  touch-action: none; /* Critical for smooth finger/stylus drawing on mobile/tablet */
+  user-select: none;
+}
+
+/* Primary school ruled writing lines */
+.writing-lines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.writing-lines .line {
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  height: 2px;
+}
+
+.top-line {
+  top: 18%;
+  border-top: 2px dashed #e2e8f0;
+}
+
+.mid-line {
+  top: 50%;
+  border-top: 2px dashed #bae6fd;
+}
+
+.base-line {
+  bottom: 18%;
+  border-top: 2px solid #cbd5e1;
+}
+
+/* Large Uppercase Tracing Guide */
+.letter-guide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 270px;
+  line-height: 1;
+  color: var(--guide-grey);
+  pointer-events: none;
+  user-select: none;
+  z-index: 2;
+  transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s ease;
+}
+
+.letter-guide.pop {
+  animation: letterBounce 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes letterBounce {
+  0% { transform: scale(0.84); opacity: 0.4; }
+  70% { transform: scale(1.04); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Drawing Canvas Layer */
+#drawingCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  z-index: 3;
+  cursor: crosshair;
+}
+
+#drawingCanvas.eraser-cursor {
+  cursor: cell;
+}
+
+/* =========================================================
+   Positive Feedback & Star Effects
+   ========================================================= */
+.feedback-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 4;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 18px;
+}
+
+.feedback-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #ffffff;
+  border: 3px solid var(--yellow);
+  box-shadow: 0 8px 20px rgba(255, 200, 0, 0.28);
+  padding: 10px 22px;
+  border-radius: 999px;
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text-main);
+  opacity: 0;
+  transform: translateY(-16px) scale(0.9);
+  transition: opacity 0.25s ease, transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.feedback-pill.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.stars-container {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.burst-star {
+  position: absolute;
+  font-size: 1.8rem;
+  animation: starPop 1s ease-out forwards;
+}
+
+@keyframes starPop {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.4) rotate(0deg);
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--tx), var(--ty)) scale(1.25) rotate(180deg);
+  }
+}
+
+/* =========================================================
+   Bottom Controls Bar
+   ========================================================= */
+.controls-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.action-group,
+.nav-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+@keyframes popIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.94) translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* =========================================================
+   Responsive Design (Tablet & Mobile)
+   ========================================================= */
+@media (max-width: 960px) {
+  .app-layout {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  /* Horizontal scrollable strip on tablets/mobile so the board stays front and center */
+  .alphabet-panel {
+    padding: 14px 16px;
+  }
+
+  .panel-header h2 {
+    margin-bottom: 10px;
+    font-size: 1.05rem;
+  }
+
+  .alphabet-grid {
+    display: flex;
+    overflow-x: auto;
+    gap: 10px;
+    padding-bottom: 6px;
+    scrollbar-width: thin;
+  }
+
+  .letter-card {
+    flex: 0 0 54px;
+    height: 54px;
+    font-size: 1.35rem;
+  }
+
+  .board-section {
+    order: -1; /* Keep writing board as main visual focus on smaller screens */
+  }
+}
+
+@media (max-width: 600px) {
+  .top-bar {
+    padding: 12px 14px;
+  }
+
+  .current-badge {
+    font-size: 1.15rem;
+  }
+
+  .app-layout {
+    padding: 4px 14px 24px;
+  }
+
+  .board-card {
+    padding: 14px;
+    border-radius: 22px;
+    gap: 14px;
+  }
+
+  .canvas-stage {
+    height: 310px;
+  }
+
+  .letter-guide {
+    font-size: 205px;
+  }
+
+  .controls-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .action-group,
+  .nav-group {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+
+  .nav-group {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .btn {
+    padding: 12px 10px;
+    font-size: 0.9rem;
+  }
+
+  .feedback-pill {
+    font-size: 1.1rem;
+    padding: 8px 16px;
+  }
+}
+/* =========================================================
+   Game-Style Celebration Popup Modal
+   ========================================================= */
+.celebration-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  overflow: hidden;
+}
+
+.celebration-modal[hidden] {
+  display: none;
+}
+
+.celebration-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(23, 42, 74, 0.58);
+  backdrop-filter: blur(5px);
+  animation: fadeIn 0.25s ease forwards;
+}
+
+.celebration-stage {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  max-width: 780px;
+  width: 100%;
+  margin-bottom: 40px;
+  animation: modalPopIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Cheering Kid Mascot on the Left */
+.celebration-mascot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  animation: mascotBounce 1.8s ease-in-out infinite;
+}
+
+.mascot-circle {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #ffffff 0%, #dbeafe 100%);
+  border: 6px solid #ffd43b;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mascot-kid {
+  font-size: 5.2rem;
+  line-height: 1;
+}
+
+.mascot-ribbon {
+  margin-top: -16px;
+  background: linear-gradient(180deg, #58cc02 0%, #46a302 100%);
+  color: #ffffff;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.15rem;
+  letter-spacing: 0.05em;
+  padding: 6px 22px;
+  border-radius: 999px;
+  border: 3px solid #ffffff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Glossy Blue Result Card */
+.celebration-card-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 430px;
+}
+
+.celebration-card {
+  width: 100%;
+  background: linear-gradient(180deg, #86a8ff 0%, #688ef5 55%, #587ce8 100%);
+  border: 4px solid #a9c2ff;
+  border-radius: 28px;
+  padding: 26px 24px 34px;
+  text-align: center;
+  color: #ffffff;
+  box-shadow:
+    0 14px 32px rgba(24, 48, 117, 0.35),
+    inset 0 3px 6px rgba(255, 255, 255, 0.45);
+}
+
+.celebration-title {
+  font-family: var(--font-display);
+  font-size: 2.3rem;
+  font-weight: 700;
+  line-height: 1.1;
+  text-shadow: 0 3px 0 rgba(35, 62, 140, 0.45);
+  margin-bottom: 6px;
+}
+
+.celebration-subtitle {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #eef4ff;
+  margin-bottom: 18px;
+}
+
+/* 3 Kawaii Stars Row */
+.kawaii-stars-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.kawaii-star {
+  width: 82px;
+  height: 82px;
+  filter: drop-shadow(0 6px 8px rgba(35, 62, 140, 0.3));
+  animation: starPopBounce 0.55s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+.kawaii-star.star-1 {
+  animation-delay: 0.12s;
+  transform: rotate(-8deg);
+}
+
+.kawaii-star.star-2 {
+  width: 94px;
+  height: 94px;
+  animation-delay: 0.24s;
+}
+
+.kawaii-star.star-3 {
+  animation-delay: 0.36s;
+  transform: rotate(8deg);
+}
+
+/* Status Row inside Blue Card */
+.celebration-stats {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  font-family: var(--font-display);
+  font-size: 1.45rem;
+  font-weight: 700;
+  text-shadow: 0 2px 0 rgba(35, 62, 140, 0.4);
+}
+
+.stat-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stat-check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #58cc02;
+  color: #ffffff;
+  font-size: 1.1rem;
+  box-shadow: 0 3px 0 #3d8f00;
+}
+
+.stat-star-icon {
+  font-size: 1.5rem;
+}
+
+/* Overlapping Pill Buttons & Bear Icon */
+.celebration-actions {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: -22px;
+  z-index: 3;
+}
+
+.bear-badge {
+  position: absolute;
+  top: -22px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.65rem;
+  background: #ffd43b;
+  border: 3px solid #ffffff;
+  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  pointer-events: none;
+}
+
+.modal-pill-btn {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #ffffff;
+  padding: 13px 26px;
+  border-radius: 999px;
+  border: 3px solid #a9c2ff;
+  cursor: pointer;
+  text-shadow: 0 2px 0 rgba(35, 62, 140, 0.4);
+  box-shadow: 0 6px 0 #3f5ec4, 0 10px 18px rgba(0, 0, 0, 0.25);
+  transition: transform 0.12s ease, filter 0.15s ease;
+}
+
+.modal-pill-btn:hover {
+  filter: brightness(1.06);
+  transform: translateY(-2px);
+}
+
+.modal-pill-btn:active {
+  transform: translateY(3px);
+  box-shadow: 0 2px 0 #3f5ec4;
+}
+
+.modal-btn-secondary {
+  background: linear-gradient(180deg, #86a8ff 0%, #6488ee 100%);
+}
+
+.modal-btn-primary {
+  background: linear-gradient(180deg, #67d914 0%, #4eb800 100%);
+  border-color: #b7f584;
+  box-shadow: 0 6px 0 #378500, 0 10px 18px rgba(0, 0, 0, 0.25);
+}
+
+/* Bottom Foreground Kawaii Stars Crowd */
+.bottom-stars-crowd {
+  position: absolute;
+  left: -20px;
+  right: -20px;
+  bottom: -18px;
+  height: 115px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.crowd-star {
+ width: var(--size, 84px);
+  height: var(--size, 84px);
+  flex-shrink: 0;
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.22));
+  animation: crowdBounce 1.6s ease-in-out infinite alternate;
+  animation-delay: var(--delay, 0s);
+}
+
+/* Modal Keyframes */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes modalPopIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) translateY(24px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes starPopBounce {
+  0% {
+    opacity: 0;
+    transform: scale(0.2) rotate(-25deg);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1.15) rotate(4deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+@keyframes mascotBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes crowdBounce {
+  0% { transform: translateY(10px) rotate(-4deg); }
+  100% { transform: translateY(-6px) rotate(4deg); }
+}
+
+@media (max-width: 720px) {
+  .celebration-stage {
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 65px;
+  }
+
+  .mascot-circle {
+    width: 105px;
+    height: 105px;
+  }
+
+  .mascot-kid {
+    font-size: 3.6rem;
+  }
+
+  .celebration-title {
+    font-size: 1.9rem;
+  }
+
+  .kawaii-star {
+    width: 66px;
+    height: 66px;
+  }
+
+  .kawaii-star.star-2 {
+    width: 76px;
+    height: 76px;
+  }
+
+  .bottom-stars-crowd {
+    height: 85px;
+  }
+}
