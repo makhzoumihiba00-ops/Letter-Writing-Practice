@@ -477,7 +477,8 @@ document.addEventListener("DOMContentLoaded", () => {
   canvas.addEventListener("pointermove", handlePointerMove);
   canvas.addEventListener("pointerup", handlePointerUp);
   canvas.addEventListener("pointercancel", handlePointerUp);
-
+canvas.addEventListener("touchstart", (e) => e.preventDefault(), { passive: false });
+  canvas.addEventListener("touchmove", (e) => e.preventDefault(), { passive: false });
   window.addEventListener("resize", () => resizeCanvas(true));
 
   // =========================================================

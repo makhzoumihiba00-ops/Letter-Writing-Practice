@@ -42,6 +42,7 @@
 html,
 body {
   width: 100%;
+  max-width: 100%;
   min-height: 100vh;
   overflow-x: hidden;
   font-family: var(--font-body);
@@ -334,7 +335,7 @@ body {
 }
 
 /* =========================================================
-   Main App Grid Layout
+   Main App Grid Layout (Desktop)
    ========================================================= */
 .app-layout {
   display: grid;
@@ -353,6 +354,7 @@ body {
   padding: 20px;
   border: 3px solid var(--border-light);
   box-shadow: var(--shadow-soft);
+  min-width: 0;
 }
 
 .panel-header h2 {
@@ -409,6 +411,10 @@ body {
 /* =========================================================
    Letter Writing Board
    ========================================================= */
+.board-section {
+  min-width: 0;
+}
+
 .board-card {
   background: var(--bg-card);
   border-radius: var(--radius-xl);
@@ -493,7 +499,7 @@ body {
   border-radius: 24px;
   border: 3px dashed #cbd5e1;
   overflow: hidden;
-  touch-action: none; /* Critical for smooth finger/stylus drawing on mobile/tablet */
+  touch-action: none;
   user-select: none;
 }
 
@@ -564,6 +570,7 @@ body {
   display: block;
   z-index: 3;
   cursor: crosshair;
+  touch-action: none;
 }
 
 #drawingCanvas.eraser-cursor {
@@ -571,7 +578,7 @@ body {
 }
 
 /* =========================================================
-   Positive Feedback & Star Effects
+   Positive Feedback Toast
    ========================================================= */
 .feedback-overlay {
   position: absolute;
@@ -607,33 +614,6 @@ body {
   transform: translateY(0) scale(1);
 }
 
-.stars-container {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
-
-.burst-star {
-  position: absolute;
-  font-size: 1.8rem;
-  animation: starPop 1s ease-out forwards;
-}
-
-@keyframes starPop {
-  0% {
-    opacity: 0;
-    transform: translate(0, 0) scale(0.4) rotate(0deg);
-  }
-  25% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-    transform: translate(var(--tx), var(--ty)) scale(1.25) rotate(180deg);
-  }
-}
-
 /* =========================================================
    Bottom Controls Bar
    ========================================================= */
@@ -663,97 +643,6 @@ body {
   }
 }
 
-/* =========================================================
-   Responsive Design (Tablet & Mobile)
-   ========================================================= */
-@media (max-width: 960px) {
-  .app-layout {
-    grid-template-columns: 1fr;
-    gap: 18px;
-  }
-
-  /* Horizontal scrollable strip on tablets/mobile so the board stays front and center */
-  .alphabet-panel {
-    padding: 14px 16px;
-  }
-
-  .panel-header h2 {
-    margin-bottom: 10px;
-    font-size: 1.05rem;
-  }
-
-  .alphabet-grid {
-    display: flex;
-    overflow-x: auto;
-    gap: 10px;
-    padding-bottom: 6px;
-    scrollbar-width: thin;
-  }
-
-  .letter-card {
-    flex: 0 0 54px;
-    height: 54px;
-    font-size: 1.35rem;
-  }
-
-  .board-section {
-    order: -1; /* Keep writing board as main visual focus on smaller screens */
-  }
-}
-
-@media (max-width: 600px) {
-  .top-bar {
-    padding: 12px 14px;
-  }
-
-  .current-badge {
-    font-size: 1.15rem;
-  }
-
-  .app-layout {
-    padding: 4px 14px 24px;
-  }
-
-  .board-card {
-    padding: 14px;
-    border-radius: 22px;
-    gap: 14px;
-  }
-
-  .canvas-stage {
-    height: 310px;
-  }
-
-  .letter-guide {
-    font-size: 205px;
-  }
-
-  .controls-bar {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .action-group,
-  .nav-group {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-  }
-
-  .nav-group {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .btn {
-    padding: 12px 10px;
-    font-size: 0.9rem;
-  }
-
-  .feedback-pill {
-    font-size: 1.1rem;
-    padding: 8px 16px;
-  }
-}
 /* =========================================================
    Game-Style Celebration Popup Modal
    ========================================================= */
@@ -793,7 +682,6 @@ body {
   animation: modalPopIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
-/* Cheering Kid Mascot on the Left */
 .celebration-mascot {
   display: flex;
   flex-direction: column;
@@ -833,7 +721,6 @@ body {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-/* Glossy Blue Result Card */
 .celebration-card-wrapper {
   display: flex;
   flex-direction: column;
@@ -871,7 +758,6 @@ body {
   margin-bottom: 18px;
 }
 
-/* 3 Kawaii Stars Row */
 .kawaii-stars-row {
   display: flex;
   align-items: center;
@@ -903,7 +789,6 @@ body {
   transform: rotate(8deg);
 }
 
-/* Status Row inside Blue Card */
 .celebration-stats {
   display: flex;
   align-items: center;
@@ -938,7 +823,6 @@ body {
   font-size: 1.5rem;
 }
 
-/* Overlapping Pill Buttons & Bear Icon */
 .celebration-actions {
   position: relative;
   display: flex;
@@ -1001,7 +885,6 @@ body {
   box-shadow: 0 6px 0 #378500, 0 10px 18px rgba(0, 0, 0, 0.25);
 }
 
-/* Bottom Foreground Kawaii Stars Crowd */
 .bottom-stars-crowd {
   position: absolute;
   left: -20px;
@@ -1016,7 +899,7 @@ body {
 }
 
 .crowd-star {
- width: var(--size, 84px);
+  width: var(--size, 84px);
   height: var(--size, 84px);
   flex-shrink: 0;
   filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.22));
@@ -1024,7 +907,6 @@ body {
   animation-delay: var(--delay, 0s);
 }
 
-/* Modal Keyframes */
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
@@ -1066,37 +948,260 @@ body {
   100% { transform: translateY(-6px) rotate(4deg); }
 }
 
-@media (max-width: 720px) {
+/* =========================================================
+   RESPONSIVE DESIGN: TABLET (<= 960px)
+   ========================================================= */
+@media (max-width: 960px) {
+  .app-layout {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 8px 16px 28px;
+  }
+
+  /* L-Writing Board y-bqa howa l-awel f-l-foq */
+  .board-section {
+    order: -1;
+  }
+
+  /* L-7orof (A-Z) y-welliw slider afqi (horizontal) sahl b-s-sbe3 */
+  .alphabet-panel {
+    padding: 14px 16px;
+    border-radius: 22px;
+  }
+
+  .panel-header h2 {
+    margin-bottom: 10px;
+    font-size: 1.05rem;
+  }
+
+  .alphabet-grid {
+    display: flex;
+    overflow-x: auto;
+    gap: 10px;
+    padding-bottom: 8px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .letter-card {
+    flex: 0 0 56px;
+    height: 56px;
+    font-size: 1.35rem;
+    scroll-snap-align: center;
+  }
+
+  .celebration-stage {
+    gap: 16px;
+    max-width: 640px;
+  }
+}
+
+/* =========================================================
+   RESPONSIVE DESIGN: MOBILE (<= 600px)
+   ========================================================= */
+@media (max-width: 600px) {
+  /* Home Page */
+  .home-page {
+    padding: 16px;
+  }
+
+  .welcome-card {
+    padding: 32px 20px;
+    border-radius: 24px;
+  }
+
+  .mascot-badge {
+    width: 74px;
+    height: 74px;
+  }
+
+  .mascot-pencil {
+    font-size: 2.3rem;
+  }
+
+  .preview-tiles {
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+
+  .tile {
+    width: 46px;
+    height: 46px;
+    font-size: 1.4rem;
+    border-radius: 13px;
+  }
+
+  .btn-lg {
+    width: 100%;
+    font-size: 1.15rem;
+    padding: 16px 24px;
+  }
+
+  /* Header */
+  .top-bar {
+    padding: 10px 14px;
+  }
+
+  .current-badge {
+    font-size: 1.15rem;
+  }
+
+  .letter-counter {
+    font-size: 0.78rem;
+    padding: 4px 10px;
+  }
+
+  .app-layout {
+    padding: 4px 12px 24px;
+  }
+
+  /* Board */
+  .board-card {
+    padding: 14px;
+    border-radius: 22px;
+    gap: 12px;
+  }
+
+  .board-top-bar {
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .tool-btn {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+  }
+
+  .color-picker {
+    gap: 8px;
+  }
+
+  .color-swatch {
+    width: 30px;
+    height: 30px;
+  }
+
+  .canvas-stage {
+    height: 295px;
+    border-radius: 18px;
+  }
+
+  /* Boutons dyal t-ta7akom m-qaddin f-Grid */
+  .controls-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .action-group {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+
+  .nav-group {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .controls-bar .btn {
+    padding: 12px 8px;
+    font-size: 0.88rem;
+    border-radius: 14px;
+  }
+
+  .feedback-pill {
+    font-size: 1.05rem;
+    padding: 8px 16px;
+  }
+
+  /* Popup Modal f-Mobile */
+  .celebration-modal {
+    padding: 14px;
+  }
+
   .celebration-stage {
     flex-direction: column;
-    gap: 14px;
-    margin-bottom: 65px;
+    gap: 12px;
+    margin-bottom: 58px;
   }
 
   .mascot-circle {
-    width: 105px;
-    height: 105px;
+    width: 96px;
+    height: 96px;
+    border-width: 4px;
   }
 
   .mascot-kid {
-    font-size: 3.6rem;
+    font-size: 3.2rem;
+  }
+
+  .mascot-ribbon {
+    font-size: 0.95rem;
+    padding: 4px 16px;
+  }
+
+  .celebration-card {
+    padding: 20px 16px 28px;
+    border-radius: 22px;
   }
 
   .celebration-title {
-    font-size: 1.9rem;
+    font-size: 1.8rem;
+  }
+
+  .celebration-subtitle {
+    font-size: 0.95rem;
+    margin-bottom: 14px;
   }
 
   .kawaii-star {
-    width: 66px;
-    height: 66px;
+    width: 62px;
+    height: 62px;
   }
 
   .kawaii-star.star-2 {
-    width: 76px;
-    height: 76px;
+    width: 72px;
+    height: 72px;
+  }
+
+  .celebration-stats {
+    gap: 18px;
+    font-size: 1.2rem;
+  }
+
+  .celebration-actions {
+    width: 100%;
+    padding: 0 8px;
+    gap: 8px;
+  }
+
+  .modal-pill-btn {
+    flex: 1;
+    font-size: 1rem;
+    padding: 12px 14px;
   }
 
   .bottom-stars-crowd {
-    height: 85px;
+    height: 80px;
+  }
+}
+
+/* =========================================================
+   RESPONSIVE DESIGN: VERY SMALL PHONES (<= 375px)
+   ========================================================= */
+@media (max-width: 375px) {
+  .canvas-stage {
+    height: 255px;
+  }
+
+  .controls-bar .btn {
+    font-size: 0.8rem;
+    padding: 10px 6px;
+  }
+
+  .celebration-title {
+    font-size: 1.55rem;
   }
 }
