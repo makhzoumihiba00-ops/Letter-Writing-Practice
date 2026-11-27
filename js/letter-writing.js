@@ -6,8 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const POSITIVE_MESSAGES = [
     { text: "Good job!", emoji: "🌟" },
     { text: "Amazing!", emoji: "🎉" },
-    { text: "Well Done!", emoji: "🏆" },
-    { text: "Keep Practicing!", emoji: "💪" }
+    { text: "Well Done!", emoji: "🏆" }
   ];
 
   let currentIndex = 0;
@@ -17,7 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let soundEnabled = true;
   let hasDrawnOnCurrent = false;
   let feedbackTimeout = null;
-  let autoPraiseTimeout = null;
+  let autoCheckTimeout = null;
 
   // =========================================================
   // DOM Elements
@@ -89,7 +88,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // =========================================================
-  // Canvas Sizing & High-DPI Support (No Stretching)
+  // Canvas Sizing & High-DPI Support
   // =========================================================
   function resizeCanvas(preserveDrawing = true) {
     const rect = canvasStage.getBoundingClientRect();
@@ -138,7 +137,7 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
       ctx.globalCompositeOperation = "source-over";
       ctx.strokeStyle = strokeColor;
-      ctx.lineWidth = 18;
+      ctx.lineWidth = 22;
     }
   }
 
@@ -148,8 +147,104 @@ document.addEventListener("DOMContentLoaded", () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.restore();
     hasDrawnOnCurrent = false;
-    clearTimeout(autoPraiseTimeout);
+    clearTimeout(autoCheckTimeout);
     configureBrush();
+  }
+
+  // =========================================================
+  // Smart Letter Tracing Evaluation (Pixel Comparison)
+  // =========================================================
+  function evaluateTracing() {
+    const rect = canvasStage.getBoundingClientRect();
+    const w = Math.round(rect.width);
+    const h = Math.round(rect.height);
+    if (w === 0 || h === 0) return { valid: false, reason: "empty" };
+
+    const letter = ALPHABET[currentIndex];
+    const guideSize = Math.round(Math.min(w * 0.62, h * 0.68));
+
+    // 1. Render reference letter onto an offscreen canvas at exact center
+    const refCanvas = document.createElement("canvas");
+    refCanvas.width = w;
+    refCanvas.height = h;
+    const refCtx = refCanvas.getContext("2d");
+
+    refCtx.fillStyle = "#000000";
+    refCtx.font = `700 ${guideSize}px "Fredoka", "Nunito", sans-serif`;
+    refCtx.textAlign = "center";
+    refCtx.textBaseline = "middle";
+    // Slight dilation via stroke so child-friendly tolerance zone around the letter is generous
+    refCtx.lineWidth = 18;
+    refCtx.lineJoin = "round";
+    refCtx.strokeStyle = "#000000";
+    refCtx.strokeText(letter, w / 2, h / 2 + guideSize * 0.03);
+    refCtx.fillText(letter, w / 2, h / 2 + guideSize * 0.03);
+
+    // 2. Render user's drawing scaled to CSS dimensions (w x h)
+    const userCanvas = document.createElement("canvas");
+    userCanvas.width = w;
+    userCanvas.height = h;
+    const userCtx = userCanvas.getContext("2d");
+    userCtx.drawImage(canvas, 0, 0, canvas.width, canvas.height, 0, 0, w, h);
+
+    const refData = refCtx.getImageData(0, 0, w, h).data;
+    const userData = userCtx.getImageData(0, 0, w, h).data;
+
+    let refPixels = 0;
+    let userPixels = 0;
+    let matchedPixels = 0;
+    let outsidePixels = 0;
+
+    // Sample every 2nd pixel for instant mobile performance
+    for (let y = 0; y < h; y += 2) {
+      for (let x = 0; x < w; x += 2) {
+        const idx = (y * w + x) * 4 + 3; // Alpha channel
+        const isRef = refData[idx] > 40;
+        const isUser = userData[idx] > 40;
+
+        if (isRef) refPixels++;
+        if (isUser) {
+          userPixels++;
+          if (isRef) {
+            matchedPixels++;
+          } else {
+            outsidePixels++;
+          }
+        }
+      }
+    }
+
+    if (userPixels < 25) {
+      return {
+        valid: false,
+        message: `Trace the letter ${letter} first!`,
+        emoji: "✏️"
+      };
+    }
+
+    const coverage = refPixels > 0 ? matchedPixels / refPixels : 0; // How much of the letter was covered
+    const accuracy = userPixels > 0 ? matchedPixels / userPixels : 0; // How much stayed on the letter vs scribbling outside
+
+    // Child-friendly thresholds:
+    // - Must cover at least 48% of the letter shape
+    // - At least 45% of what they drew must be on the letter (rejects random scribbling)
+    if (coverage >= 0.48 && accuracy >= 0.45) {
+      return { valid: true };
+    }
+
+    if (accuracy < 0.45) {
+      return {
+        valid: false,
+        message: `Stay inside the letter ${letter}! Try again`,
+        emoji: "🎯"
+      };
+    }
+
+    return {
+      valid: false,
+      message: `Almost! Finish tracing all of ${letter}`,
+      emoji: "💪"
+    };
   }
 
   // =========================================================
@@ -206,7 +301,7 @@ document.addEventListener("DOMContentLoaded", () => {
     canvas.setPointerCapture(event.pointerId);
 
     isDrawing = true;
-    clearTimeout(autoPraiseTimeout);
+    clearTimeout(autoCheckTimeout);
     configureBrush();
 
     const pos = getPointerPosition(event);
@@ -239,11 +334,18 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     ctx.beginPath();
 
+    // Auto-check when child pauses after drawing
     if (hasDrawnOnCurrent && currentTool === "pen") {
-      clearTimeout(autoPraiseTimeout);
-      autoPraiseTimeout = setTimeout(() => {
-        showQuickFeedback();
-      }, 1300);
+      clearTimeout(autoCheckTimeout);
+      autoCheckTimeout = setTimeout(() => {
+        const result = evaluateTracing();
+        if (result.valid) {
+          const pick = POSITIVE_MESSAGES[Math.floor(Math.random() * POSITIVE_MESSAGES.length)];
+          showToast(pick.text, pick.emoji, true);
+        } else if (result.message) {
+          showToast(result.message, result.emoji, false);
+        }
+      }, 1100);
     }
   }
 
@@ -277,7 +379,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // =========================================================
-  // Positive Feedback, Celebration Modal & Cheerful Sound
+  // Feedback Toast, Celebration Modal & Sound
   // =========================================================
   function playCheerfulSound() {
     if (!soundEnabled) return;
@@ -288,6 +390,31 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
       playSynthChime();
     }
+  }
+
+  function playGentleTryAgainSound() {
+    if (!soundEnabled) return;
+    try {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      const audioCtx = new AudioCtx();
+      const notes = [392.0, 329.63]; // G4 -> E4 gentle boop
+
+      notes.forEach((freq, idx) => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = "sine";
+        osc.frequency.value = freq;
+
+        const startTime = audioCtx.currentTime + idx * 0.12;
+        gain.gain.setValueAtTime(0.14, startTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.25);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(startTime);
+        osc.stop(startTime + 0.26);
+      });
+    } catch (_) {}
   }
 
   function playSynthChime() {
@@ -311,22 +438,20 @@ document.addEventListener("DOMContentLoaded", () => {
         osc.start(startTime);
         osc.stop(startTime + 0.36);
       });
-    } catch (_) {
-      // Ignore if browser blocks audio before interaction
-    }
+    } catch (_) {}
   }
 
-  function showQuickFeedback() {
+  function showToast(text, emoji, isSuccess = true) {
     if (!feedbackPill) return;
-    const pick = POSITIVE_MESSAGES[Math.floor(Math.random() * POSITIVE_MESSAGES.length)];
-    feedbackText.textContent = pick.text;
-    feedbackEmoji.textContent = pick.emoji;
+    feedbackText.textContent = text;
+    feedbackEmoji.textContent = emoji;
+    feedbackPill.style.borderColor = isSuccess ? "#58cc02" : "#ff9600";
     feedbackPill.classList.add("show");
 
     clearTimeout(feedbackTimeout);
     feedbackTimeout = setTimeout(() => {
       hideFeedback();
-    }, 2200);
+    }, 2400);
   }
 
   function hideFeedback() {
@@ -399,8 +524,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       spawnBottomStars();
       celebrationModal.hidden = false;
-    } else {
-      showQuickFeedback();
     }
   }
 
@@ -428,8 +551,21 @@ document.addEventListener("DOMContentLoaded", () => {
     letterGuide.classList.add("pop");
   });
 
+  // Verify letter before celebrating!
   doneBtn.addEventListener("click", () => {
-    openCelebrationModal();
+    clearTimeout(autoCheckTimeout);
+    const result = evaluateTracing();
+
+    if (result.valid) {
+      openCelebrationModal();
+    } else {
+      playGentleTryAgainSound();
+      showToast(result.message, result.emoji, false);
+      // Shake guide gently so child sees what to trace
+      letterGuide.classList.remove("pop");
+      void letterGuide.offsetWidth;
+      letterGuide.classList.add("pop");
+    }
   });
 
   if (modalRetryBtn) {
@@ -477,8 +613,10 @@ document.addEventListener("DOMContentLoaded", () => {
   canvas.addEventListener("pointermove", handlePointerMove);
   canvas.addEventListener("pointerup", handlePointerUp);
   canvas.addEventListener("pointercancel", handlePointerUp);
-canvas.addEventListener("touchstart", (e) => e.preventDefault(), { passive: false });
+
+  canvas.addEventListener("touchstart", (e) => e.preventDefault(), { passive: false });
   canvas.addEventListener("touchmove", (e) => e.preventDefault(), { passive: false });
+
   window.addEventListener("resize", () => resizeCanvas(true));
 
   // =========================================================
